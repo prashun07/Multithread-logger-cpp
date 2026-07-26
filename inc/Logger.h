@@ -11,8 +11,6 @@
 #include <atomic>
 #include <iostream>
 
-namespace mtlog {
-
 class Logger {
 public:
     enum class Mode { Synchronous, Asynchronous };
@@ -64,14 +62,15 @@ public:
     }
 
     template<typename... Args>
-    void log(LogLevel lvl, std::source_location loc, const char* fmt, Args&&... args) {
+    void log(LogLevel lvl, std::source_location loc,  const std::format_string<Args...>fmt, Args&&... args) {
+    // void log(LogLevel lvl, std::source_location loc,  const char* fmt, Args&&... args) {
         if (!is_enabled(lvl, level_)) return;
 
         std::string msg;
         try {
             msg = std::format(fmt, std::forward<Args>(args)...);
         } catch (const std::format_error& e) {
-            msg = std::string("[FORMAT ERROR: ") + e.what() + "] " + fmt;
+            msg = std::string("[FORMAT ERROR: ") + e.what() + "] ";
         }
 
         LogRecord record{
@@ -120,22 +119,21 @@ private:
     }
 };
 
-} // namespace mtlog
 
 /* ---------- Macros for ergonomic source location ---------- */
-#ifndef MTLOG_DISABLE_TRACE
-#  define MTLOG_TRACE(logger, ...) (logger).log(mtlog::LogLevel::Trace, std::source_location::current(), __VA_ARGS__)
+#ifndef DISABLE_TRACE
+#  define TRACE(logger, ...) (logger).log(LogLevel::Trace, std::source_location::current(), __VA_ARGS__)
 #else
-#  define MTLOG_TRACE(logger, ...) ((void)0)
+#  define TRACE(logger, ...) ((void)0)
 #endif
 
-#ifndef MTLOG_DISABLE_DEBUG
-#  define MTLOG_DEBUG(logger, ...) (logger).log(mtlog::LogLevel::Debug, std::source_location::current(), __VA_ARGS__)
+#ifndef DISABLE_DEBUG
+#  define DEBUG(logger, ...) (logger).log(LogLevel::Debug, std::source_location::current(), __VA_ARGS__)
 #else
-#  define MTLOG_DEBUG(logger, ...) ((void)0)
+#  define DEBUG(logger, ...) ((void)0)
 #endif
 
-#define MTLOG_INFO(logger, ...)  (logger).log(mtlog::LogLevel::Info,    std::source_location::current(), __VA_ARGS__)
-#define MTLOG_WARN(logger, ...)  (logger).log(mtlog::LogLevel::Warning, std::source_location::current(), __VA_ARGS__)
-#define MTLOG_ERROR(logger, ...) (logger).log(mtlog::LogLevel::Error,   std::source_location::current(), __VA_ARGS__)
-#define MTLOG_FATAL(logger, ...) (logger).log(mtlog::LogLevel::Fatal,   std::source_location::current(), __VA_ARGS__)
+#define INFO(logger, ...)  (logger).log(LogLevel::Info,    std::source_location::current(), __VA_ARGS__)
+#define WARN(logger, ...)  (logger).log(LogLevel::Warning, std::source_location::current(), __VA_ARGS__)
+#define ERROR(logger, ...) (logger).log(LogLevel::Error,   std::source_location::current(), __VA_ARGS__)
+#define FATAL(logger, ...) (logger).log(LogLevel::Fatal,   std::source_location::current(), __VA_ARGS__)
