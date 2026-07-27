@@ -62,7 +62,7 @@ public:
     }
 
     template<typename... Args>
-    void log(LogLevel lvl, std::source_location loc,  const std::format_string<Args...>fmt, Args&&... args) {
+    void log_dump(LogLevel lvl, std::source_location loc,  const std::format_string<Args...>fmt, Args&&... args) {
     // void log(LogLevel lvl, std::source_location loc,  const char* fmt, Args&&... args) {
         if (!is_enabled(lvl, level_)) return;
 
@@ -101,8 +101,8 @@ public:
         return queue_ ? queue_->dropped() : 0;
     }
     template <typename... Args>
-    void info(std::format_string<Args...> fmt, Args &&...args) {
-        log(LogLevel::Info, std::source_location::current() ,fmt, std::forward<Args>(args)...);
+    void log(std::format_string<Args...> fmt, Args &&...args) {
+        log_dump(level_, std::source_location::current() ,fmt, std::forward<Args>(args)...);
     }
 
 private:

@@ -12,9 +12,9 @@ target_include_directories(inc INTERFACE
     $<INSTALL_INTERFACE:include>
 )
 
-# ---- Example ----
-add_executable(example src/main.cpp)
-target_link_libraries(example PRIVATE inc)
-target_compile_options(example PRIVATE
+# ---- Test ----
+add_executable(test src/main.cpp)
+target_link_libraries(test PRIVATE inc)
+target_compile_options(test PRIVATE
     -Wall -Wextra -Wpedantic -O2 -pthread
 )
