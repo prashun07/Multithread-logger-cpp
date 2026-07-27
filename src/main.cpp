@@ -6,15 +6,17 @@
 
 int main() {
 
-    auto logger = LoggerBuilder().with_level(LogLevel::Debug)
-        .with_console_sink(true)                       // colorized stdout
-        .with_rotating_file_sink("app.log",            // 10 MB rotation, 5 backups
-                                 10 * 1024 * 1024,
-                                 5)
-        .with_async_mode(50'000, QueuePolicy::Block)   // 50k record buffer
-        .with_flush_interval(std::chrono::milliseconds(500))
-        .build();
+    // auto logger = LoggerBuilder().with_level(LogLevel::Debug)
+    //     .with_console_sink(true)                       // colorized stdout
+    //     .with_rotating_file_sink("app.log",            // 10 MB rotation, 5 backups
+    //                              10 * 1024 * 1024,
+    //                              5)
+    //     .with_async_mode(50'000, QueuePolicy::Block)   // 50k record buffer
+    //     .with_flush_interval(std::chrono::milliseconds(500))
+    //     .build();
         //INFO
+    LoggerDirector director;
+    auto logger = director.asyncLogger(LogLevel::Debug);
 
     logger->info("hello");
     // logger->log("Hello");

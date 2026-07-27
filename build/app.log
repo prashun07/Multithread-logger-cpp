@@ -15003,3 +15003,4 @@
 2026-07-26T22:23:29.923464+0530 [INFO] [0x1f2ff7100] Hello  (/Users/prashunjha/Documents/Multithread-logger-cpp/src/main.cpp:21)
 2026-07-27T23:03:53.323224+0530 [INFO] [0x1f2ff7100] Hello  (/Users/prashunjha/Documents/Multithread-logger-cpp/src/main.cpp:21)
 2026-07-27T23:16:48.305647+0530 [INFO] [0x1f2ff7100] hello  (/Users/prashunjha/Documents/Multithread-logger-cpp/src/../inc/Logger.h:105)
+2026-07-27T23:42:35.828323+0530 [INFO] [0x1f2ff7100] hello  (/Users/prashunjha/Documents/Multithread-logger-cpp/src/../inc/Logger.h:105)
