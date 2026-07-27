@@ -53,3 +53,4 @@ public:
         return std::move(logger_);
     }
 };
+

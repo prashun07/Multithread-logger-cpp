@@ -100,6 +100,10 @@ public:
     size_t dropped_messages() const {
         return queue_ ? queue_->dropped() : 0;
     }
+    template <typename... Args>
+    void info(std::format_string<Args...> fmt, Args &&...args) {
+        log(LogLevel::Info, std::source_location::current() ,fmt, std::forward<Args>(args)...);
+    }
 
 private:
     void write_sync(const LogRecord& record) {
@@ -120,20 +124,20 @@ private:
 };
 
 
-/* ---------- Macros for ergonomic source location ---------- */
-#ifndef DISABLE_TRACE
-#  define TRACE(logger, ...) (logger).log(LogLevel::Trace, std::source_location::current(), __VA_ARGS__)
-#else
-#  define TRACE(logger, ...) ((void)0)
-#endif
+// /* ---------- Macros for ergonomic source location ---------- */
+// #ifndef DISABLE_TRACE
+// #  define TRACE(logger, ...) (logger).log(LogLevel::Trace, std::source_location::current(), __VA_ARGS__)
+// #else
+// #  define TRACE(logger, ...) ((void)0)
+// #endif
 
-#ifndef DISABLE_DEBUG
-#  define DEBUG(logger, ...) (logger).log(LogLevel::Debug, std::source_location::current(), __VA_ARGS__)
-#else
-#  define DEBUG(logger, ...) ((void)0)
-#endif
+// #ifndef DISABLE_DEBUG
+// #  define DEBUG(logger, ...) (logger).log(LogLevel::Debug, std::source_location::current(), __VA_ARGS__)
+// #else
+// #  define DEBUG(logger, ...) ((void)0)
+// #endif
 
-#define INFO(logger, ...)  (logger).log(LogLevel::Info,    std::source_location::current(), __VA_ARGS__)
-#define WARN(logger, ...)  (logger).log(LogLevel::Warning, std::source_location::current(), __VA_ARGS__)
-#define ERROR(logger, ...) (logger).log(LogLevel::Error,   std::source_location::current(), __VA_ARGS__)
-#define FATAL(logger, ...) (logger).log(LogLevel::Fatal,   std::source_location::current(), __VA_ARGS__)
+// #define INFO(logger, ...)  (logger).log(LogLevel::Info,    std::source_location::current(), __VA_ARGS__)
+// #define WARN(logger, ...)  (logger).log(LogLevel::Warning, std::source_location::current(), __VA_ARGS__)
+// #define ERROR(logger, ...) (logger).log(LogLevel::Error,   std::source_location::current(), __VA_ARGS__)
+// #define FATAL(logger, ...) (logger).log(LogLevel::Fatal,   std::source_location::current(), __VA_ARGS__)

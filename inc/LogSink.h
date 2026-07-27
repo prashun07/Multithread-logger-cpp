@@ -1,3 +1,5 @@
+// sink means consumer or final destination. Major logger frameworks use sink as the name convention
+// alternatively, LogSink can be renamed as LogWriter,etc
 #pragma once
 #include "LogRecord.h"
 #include "LogFormatter.h"
@@ -9,7 +11,7 @@
 #include <stdexcept>
 
 
-class ILogSink {
+class ILogSink { // Pure Virtual function or Abstract class
 public:
     virtual ~ILogSink() = default;
     virtual void write(const LogRecord& record) = 0;
@@ -34,7 +36,7 @@ public:
     }
 
     void write(const LogRecord& record) override {
-        auto formatted = formatter_->format(record);          // format outside lock
+        auto formatted = formatter_->format(record);          // format outside lock (Why?)
         std::lock_guard lock(mtx_);
         if (use_color_ && &out_ == &std::cout) {
             out_ << color_code(record.level) << formatted << "\033[0m\n";
@@ -51,14 +53,14 @@ public:
 private:
     static const char* color_code(LogLevel level) {
         switch (level) {
-            case LogLevel::Trace:   return "\033[37m";
-            case LogLevel::Debug:   return "\033[36m";
-            case LogLevel::Info:    return "\033[32m";
-            case LogLevel::Warning: return "\033[33m";
-            case LogLevel::Error:   return "\033[31m";
-            case LogLevel::Fatal:   return "\033[35m";
+            case LogLevel::Trace:   return "\033[37m"; // White
+            case LogLevel::Debug:   return "\033[36m"; // Cyan
+            case LogLevel::Info:    return "\033[32m"; // Green
+            case LogLevel::Warning: return "\033[33m"; // Yellow
+            case LogLevel::Error:   return "\033[31m"; // Red
+            case LogLevel::Fatal:   return "\033[35m"; // Magenta (Purple)
         }
-        return "\033[0m";
+        return "\033[0m"; // Reset to default color
     }
 };
 
@@ -82,10 +84,10 @@ public:
         if (file_.is_open()) file_.close();
     }
 
-    FileSink(const FileSink&) = delete;
-    FileSink& operator=(const FileSink&) = delete;
-    FileSink(FileSink&&) = delete;
-    FileSink& operator=(FileSink&&) = delete;
+    FileSink(const FileSink&) = delete;            // Disable copy constructor
+    FileSink& operator=(const FileSink&) = delete; // Disable copy assignment operator
+    FileSink(FileSink&&) = delete;                 // Disable move constructor
+    FileSink& operator=(FileSink&&) = delete;      // Disable move assignment operator
 
     void set_formatter(std::unique_ptr<ILogFormatter> formatter) override {
         std::lock_guard lock(mtx_);
@@ -142,7 +144,7 @@ protected:
 };
 
 /* ---------- RotatingFileSink ---------- */
-class RotatingFileSink : public FileSink {
+class RotatingFileSink : public FileSink { //TODO
     size_t max_size_;
     size_t max_files_;
 

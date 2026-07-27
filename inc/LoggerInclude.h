@@ -7,3 +7,4 @@
 #include "LogProcessor.h"
 #include "Logger.h"
 #include "LoggerBuilder.h"
+#include "LoggerDirector.h"
