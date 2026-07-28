@@ -8,6 +8,8 @@ void first_thread()
 {
     LoggerDirector director;
     auto logger = director.asyncLogger(LogLevel::Debug);
+    constexpr int msgs_per_thread = 10000;
+    for(int msg=0;msg<msgs_per_thread;msg++)
     logger->log("Message from first thread");
 
     logger->flush();
@@ -16,6 +18,8 @@ void second_thread()
 {
     LoggerDirector director;
     auto logger = director.syncLogger(LogLevel::Info);
+    constexpr int msgs_per_thread = 5000;
+    for(int msg=0;msg<msgs_per_thread;msg++)
     logger->log("Message from second thread");
 
     logger->flush();
@@ -24,6 +28,8 @@ void third_thread()
 {
     LoggerDirector director;
     auto logger = director.asyncLogger(LogLevel::Warning);
+    constexpr int msgs_per_thread = 1000;
+    for(int msg=0;msg<msgs_per_thread;msg++)
     logger->log("Message from Third thread");
 
     logger->flush();
@@ -32,14 +38,16 @@ void fourth_thread()
 {
     LoggerDirector director;
     auto logger = director.syncLogger(LogLevel::Error);
+    constexpr int msgs_per_thread = 1000; 
+    for(int msg=0;msg<msgs_per_thread;msg++)
     logger->log("Message from Fourth thread");
 
     logger->flush();
 }
 
 int main() {
-    constexpr int num_threads = 20;
-    // constexpr int msgs_per_thread = 10;
+    constexpr int num_threads = 2000;
+    
     std::vector<std::thread> threads;
     auto t0 = std::chrono::high_resolution_clock::now();
 

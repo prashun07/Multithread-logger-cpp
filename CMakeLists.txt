@@ -6,15 +6,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # ---- Header-only library ----
-add_library(inc INTERFACE)
-target_include_directories(inc INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+add_library(mtlog INTERFACE)
+target_include_directories(mtlog INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+    $<INSTALL_INTERFACE:inc>
 )
 
-# ---- Test ----
-add_executable(test src/main.cpp)
-target_link_libraries(test PRIVATE inc)
-target_compile_options(test PRIVATE
+# ---- Demo ----
+add_executable(example src/main.cpp)
+target_link_libraries(example PRIVATE mtlog)
+target_compile_options(example PRIVATE
+    -Wall -Wextra -Wpedantic -O2 -pthread
+)
+
+# ---- Real-world benchmark ----
+add_executable(benchmark src/benchmark.cpp)
+target_link_libraries(benchmark PRIVATE mtlog)
+target_compile_options(benchmark PRIVATE
     -Wall -Wextra -Wpedantic -O2 -pthread
 )
