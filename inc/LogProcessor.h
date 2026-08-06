@@ -44,8 +44,9 @@ private:
         auto last_flush = std::chrono::steady_clock::now();
 
         while (running_ || queue_->size() > 0) {
-            auto record = queue_->pop(std::chrono::milliseconds(10));
-            if (record) dispatch(*record);
+            LogRecord record;
+            if (queue_->pop(record, std::chrono::milliseconds(10)))
+                dispatch(record);
 
             auto now = std::chrono::steady_clock::now();
             if (now - last_flush >= flush_interval_) {
